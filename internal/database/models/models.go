@@ -5,16 +5,17 @@ import (
 )
 
 type User struct {
-	ID        uint
-	Name      string
+	ID        uint   `gorm:"primaryKey"`
+	Name      string `gorm:"not null"`
 	CreatedAt time.Time
 	UpdatedAt time.Time
 }
 
 type Task struct {
-	ID          uint
-	Title       string
-	Description string
+	ID          uint   `gorm:"not null"`
+	Title       string `gorm:"not null"`
+	Description string `gorm:"not null"`
+	Completed   bool   `gorm:"default:false"`
 	CreatedAt   time.Time
 	UpdatedAt   time.Time
 }

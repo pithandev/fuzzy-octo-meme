@@ -32,17 +32,26 @@ func Connect() error {
 	DB = db
 	log.Println("✅ Database connected successfully")
 
+	if err := AutoMigrate(); err != nil {
+		return fmt.Errorf("migrations failed: %w", err)
+	}
+
 	return nil //to avoid error mensages
 }
 
 // migrations
-func autoMigrate() error {
-	err := DB.AutoMigrate(&models.Task)
+func AutoMigrate() error {
+
+	db := GetDB()
+
+	err := db.AutoMigrate(&models.User{}, &models.Task{})
 
 	if err != nil {
-		fmt.Println("Error trying")
+		return fmt.Errorf("migration failed")
 	}
 
+	fmt.Println("✅ Database migrations applied successfully")
+	return nil
 }
 
 func GetDB() *gorm.DB {
