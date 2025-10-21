@@ -6,6 +6,7 @@ import (
 	"net/http"
 
 	"github.com/pithandev/fuzzy-octo-meme/internal/database"
+	"github.com/pithandev/fuzzy-octo-meme/internal/handlers"
 )
 
 func main() {
@@ -17,19 +18,24 @@ func main() {
 
 	// 3) print successfull message
 
-	fmt.Print("DB CONNECTED!")
+	fmt.Println("DB CONNECTED!")
 
-	// 4) keep program running
+	//setting up routes
+	setupRoutes()
 
 	port := ":8080"
 	fmt.Printf("🚀 Server starting on port http://localhost%s\n", port)
 
-	http.HandleFunc("/health", func(w http.ResponseWriter, r *http.Request) {
-		w.Write([]byte("✅ API is healthy"))
-	})
-
 	if err := http.ListenAndServe(port, nil); err != nil {
 		log.Fatal("❌ Server failed:", err)
 	}
+
+}
+
+func setupRoutes() {
+
+	//health endpoints
+	http.HandleFunc("/health", handlers.HealthCheck)
+	http.HandleFunc("/health/db", handlers.DatabaseHealthCheck)
 
 }
